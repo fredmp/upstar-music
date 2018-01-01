@@ -6,4 +6,10 @@ const Artist = require('../models/artist');
  * containing the min and max ages, like { min: 16, max: 45 }.
  */
 module.exports = () => {
+  return Artist.aggregate(
+    { $group: { _id: null, min: { $min: '$age' }, max: { $max: '$age' } } },
+    { $project: { _id: 0, min: 1, max: 1 } },
+    function (err, response) {
+      return response[0];
+    });
 };
